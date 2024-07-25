@@ -9,7 +9,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-app.listen(3000, () => console.log('running'););
+app.listen(3000, () => console.log('running'));
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
