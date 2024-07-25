@@ -28,13 +28,12 @@ const cityPlaces = ['middle', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'
 
 
 class Textbox {
-    constructor(x, y, d, defaultSize, small, smaller) {
+    constructor(x, y, d, defaultSize, small) {
         this.x = x;
         this.y = y;
         this.d = d;
         this.defaultSize = defaultSize;
         this.small = small;
-        this.smaller = smaller;
     }
 }
 
@@ -62,18 +61,17 @@ class Clickable {
 }
 
 class ClickableText extends Clickable {
-    constructor(x, y, d, name, defaultSize = 30, small = 20, smaller = 15) {
+    constructor(x, y, d, name, defaultSize = 30, small = 20) {
         super(x, y, d);
         this.name = name;
         this.words = this.name.split(/\s/);
-        this.textbox = new Textbox(x, y, d, defaultSize, small, smaller);
+        this.textbox = new Textbox(x, y, d, defaultSize, small);
     }
 
     textSizing(p, textbox) {
         p.textSize(textbox.defaultSize);
         for (let i = 0; i < this.words.length; i++) {
             if(p.textWidth(this.words[i]) > textbox.d.x) p.textSize(textbox.small);
-            if(p.textWidth(this.words[i]) > textbox.d.x) p.textSize(textbox.smaller);
         }
     }
 }
@@ -297,7 +295,7 @@ export function pushNewCity(region, index) {
             break;
     }
 
-    textbox = new Textbox(x - region.d.x / 6, y + d / 2, {x: region.d.x / 3, y: region.d.y / 4}, d, d * 0.85, d * 0.5);
+    textbox = new Textbox(x - region.d.x / 6, y + d / 2, {x: region.d.x / 3, y: region.d.y / 4}, d, d * 0.5);
     region.cities.push(new City(x, y, d, region.possibleCitys[0], textbox, populations[index], region));
     region.possibleCitys.shift();
 }
