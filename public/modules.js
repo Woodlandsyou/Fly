@@ -73,6 +73,7 @@ class ClickableText extends Clickable {
         p.textSize(textbox.defaultSize);
         for (let i = 0; i < this.words.length; i++) {
             if(p.textWidth(this.words[i]) > textbox.d.x) p.textSize(textbox.small);
+            if(p.textWidth(this.words[i]) > textbox.d.x) p.textSize(textbox.smaller);
         }
     }
 }
@@ -200,8 +201,8 @@ export class City extends ClickableText {
         p.textAlign(p.CENTER, p.CENTER);
         this.textSizing(p, this.textbox);
         p.text(this.name, this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
-        p.noFill();
-        p.rect(this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
+        // p.noFill();
+        // p.rect(this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
         p.pop();
     }
 
@@ -296,7 +297,7 @@ export function pushNewCity(region, index) {
             break;
     }
 
-    textbox = new Textbox(x - region.d.x / 6, y + d / 2, {x: region.d.x / 3, y: region.d.y / 4}, d, d * 0.7, d * 0.7);
+    textbox = new Textbox(x - region.d.x / 6, y + d / 2, {x: region.d.x / 3, y: region.d.y / 4}, d, d * 0.85, d * 0.5);
     region.cities.push(new City(x, y, d, region.possibleCitys[0], textbox, populations[index], region));
     region.possibleCitys.shift();
 }
