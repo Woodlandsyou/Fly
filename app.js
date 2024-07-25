@@ -1,5 +1,3 @@
-console.log('running');
-
 const express = require('express');
 const app = express();
 const cs = require('./node_modules/country-json/src/country-by-cities.json');
@@ -11,7 +9,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-app.listen(3000);
+app.listen(3000, () => console.log('running'););
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
