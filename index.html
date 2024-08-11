@@ -8,35 +8,84 @@
     <script src="./p5.min.js"></script>
 </head>
 <body>
+
     <main>
 
-        <div class="topBar flexEle">
+        <div class="topBar">
+
             <div class="topBarEleContainer">
                 <p id="money" class="topBarEle"></p>
             </div>
+
             <div class="topBarEleContainer">
-                <p id="cityTimer" class="topBarEle"></p>
+                <label class="searchCity" for="searchCity">search City: </label>
+                <input type="text" class="topBarEle" id="searchCity" name="searchCity" placeholder="Berlin">
             </div>
+
+            <div class="topBarEleContainer">
+                <button id="openConnectionForm">Buy Connection</button>
+            </div>
+
         </div>
 
-        <div class="popup popupRegion" id="popupRegion">
-            <div class="content">
-                <h1>Region</h1>
-                <p>&lt;&lt;Prize&gt;&gt;</p>
-                <button id="buyRegion" class="buyBtn">Buy</button>
-            </div>
-            <button class="clsPopupBtn">X</button>
-        </div>
+        <div class="popups">
 
-        <div class="popup popupCity" id="popupCity">
-            <div class="content">
-                <h1>Region</h1>
+            <div class="popup popupRegion" id="popupRegion">
+                <div class="content">
+                    <h1>Region</h1>
+                    <p>&lt;&lt;Prize&gt;&gt;</p>
+                    <button id="buyRegion" class="buyBtn">Buy</button>
+                </div>
+                <button class="clsPopupBtn">X</button>
             </div>
-            <button class="clsPopupBtn">X</button>
+    
+            <div class="popup popupCity" id="popupCity">
+                <div class="content">
+                    <h1>Region</h1>
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <button class="clsPopupBtn">X</button>
+            </div>
+    
+            <div class="popup popupFoundCity" id="popupFoundCity">
+                <div class="content">
+                    <h1></h1>
+                </div>
+                <button class="clsPopupBtn">X</button>
+            </div>
+    
+            <div class="popup popupForm" id="connectionForm">
+                <form class="form content">
+                    <h1><u>Buy Connection</u></h1>
+                    <div class="formInputs">
+                        <label for="start">Start City: </label>
+                        <input class="inputs" type="text" placeholder="Madrid" name="start" value="" required>
+                    </div>
+                    <div class="formInputs">
+                        <label for="target">Target City: </label>
+                        <input class="inputs" type="text" placeholder="Berlin" name="target" value="" required>
+                    </div>
+                    <div class="content">
+                        <p>0💸</p>
+                    </div>
+                    
+                    <button id="buyConnection" class="buyBtn">Buy</button>
+                    <button class="clsPopupBtn">X</button>
+                </form>
+            </div>
+
         </div>
 
     </main>
-    <script type="module" src="./main.js"></script>
+
+    <footer>
+        <script type="module" src="./main.js"></script>
+    </footer>
+
 
 </body>
 </html>

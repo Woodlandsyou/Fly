@@ -1,14 +1,20 @@
+import { pushNewCity } from "./functions.js";
+
 export const states = ["concealed", "discovered", "water"];
-export const cols = 7, rows = 6;
-export const _width = 1500, _height = 990;
+export const cityPlaces = ['middle', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
+export const cols = 6, rows = 5;
+export const _width = window.screen.width * 0.7, _height = window.screen.height * 0.6;
 export const s = { x: _width / cols, y: _height / rows };
 
-export const countries = await getData('/getCountriesAndCapitals');
-export const cities = await getData('/getCities');
-
-export const cityTimer = document.getElementById('cityTimer');
 export const popupRegion = document.getElementById('popupRegion');
 export const popupCity = document.getElementById('popupCity');
+export const popupFoundCity = document.getElementById('popupFoundCity');
+export const searchCity = document.getElementById('searchCity');
+export const popupForm = document.getElementById('connectionForm');
+export const connectionForm = document.getElementById('connectionForm');
+
+export const buyRegionBtn = document.getElementById('buyRegion');
+export const openConnectionForm = document.getElementById('openConnectionForm');
 
 export let possibleRegions = [];
 export let money = {
@@ -22,19 +28,16 @@ export let money = {
         document.getElementById('money').textContent = `Money: ${this.amount}💸`;
     }
 };
-
-const populations = [10000000, 5000000, 1000000, 500000, 100000];
-const cityPlaces = ['middle', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
+export let cities = [];
 
 
-class Textbox {
-    constructor(x, y, d, defaultSize, small, smaller) {
+export class Textbox {
+    constructor(x, y, d) {
         this.x = x;
         this.y = y;
         this.d = d;
-        this.defaultSize = defaultSize;
-        this.small = small;
-        this.smaller = smaller;
+        this.defaultSize = this.d.x / 3;
+        this.small = this.defaultSize / 2;
     }
 }
 
@@ -62,17 +65,17 @@ class Clickable {
 }
 
 class ClickableText extends Clickable {
-    constructor(x, y, d, name, defaultSize = 30, small = 20, smaller = 15) {
+    constructor(x, y, d, name) {
         super(x, y, d);
         this.name = name;
         this.words = this.name.split(/\s/);
-        this.textbox = new Textbox(x, y, d, defaultSize, small, smaller);
+        this.textbox = new Textbox(x, y, d);
     }
 
     textSizing(p, textbox) {
         p.textSize(textbox.defaultSize);
         for (let i = 0; i < this.words.length; i++) {
-            if(p.textWidth(this.words[i]) > textbox.d.x) p.textSize(textbox.small);
+            if(p.textWidth(this.words[i]) > textbox.d.x || textbox.defaultSize * this.words.length > textbox.d.y) p.textSize(textbox.small);
         }
     }
 }
@@ -92,7 +95,7 @@ export class Region extends ClickableText {
     set state(newState) {
         if(newState === states[1]) {
             possibleRegions.push(this);
-            pushNewCity(this, this.cities.length, populations);
+            pushNewCity(this, this.cities.length, City, Textbox, cityPlaces);
         }
         this._state = newState;
     }
@@ -172,12 +175,13 @@ export class Region extends ClickableText {
 }
 
 export class City extends ClickableText {
-    constructor(x, y, d, name, textbox, population, parent) {
+    constructor(x, y, d, name, textbox, parent) {
         super(x, y, d, name);
         this.parent = parent;
         this.capital = parent.capital === this.name;
         this.connections = [];
-        this.population = population;
+        this.population = [];
+        this.capacity = 100;
         this.textbox = textbox;
     }
 
@@ -200,8 +204,8 @@ export class City extends ClickableText {
         p.textAlign(p.CENTER, p.CENTER);
         this.textSizing(p, this.textbox);
         p.text(this.name, this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
-        p.noFill();
-        p.rect(this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
+        // p.noFill();
+        // p.rect(this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
         p.pop();
     }
 
@@ -209,94 +213,51 @@ export class City extends ClickableText {
         if(clickedOutsideOfPopupRegion) {
             popupCity.classList.toggle('active');
             popupCity.children[0].children[0].textContent = this.name;
+            const ul = popupCity.children[0].children[1];
+            ul.children[0].textContent = this.population.length ? this.population:'No population'; 
+            ul.children[1].textContent = this.capacity; 
+            ul.children[2].textContent = this.connections.length ? this.connections:'No Connections';
         }
         console.log(this);
     }
 }
 
-export function longestCountryName(countries) {
-    return countries.reduce((prev, current) => { return current.length > prev.length ? current:prev });
-}
-
-async function getData(URL) {
-    const res = await fetch(URL);
-    return await res.json();
-}
-
-export function interval(freq) {
-    return setInterval(() => {
-        if(possibleRegions.length) {
-            const r1 = Math.floor(Math.random() * possibleRegions.length);
-            const e = possibleRegions[r1];
-            console.log(`new City: ${e.possibleCitys[0]}`);
-            pushNewCity(e, e.cities.length)
-            e.possibleCitys.shift();
-            if(!e.possibleCitys.length) possibleRegions.splice(r1, 1);
-        }
-    }, freq);
-}
-
-export function findCities(country, capital, cities) {
-    for (let i = 0; i < cities.length; i++) {
-        if(cities[i].country === country) {
-            let cs = cities[i].cities.slice(0, 4);
-            for (let j = 0; j < cs.length; j++) {
-                if(cs[j] === capital) {
-                    cs.unshift(cs.splice(j, 1)[0]);
-                    return cs;
-                }
-            }
-            cs[0] = capital;
-            return cs;
-        }
+export class Person {
+    constructor(home, target) {
+        this.home = home;
+        this.target = target;
+        this.location = this.home;
     }
 }
 
-export function findEle(value, attr, arr) {
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[i].length; j++) {
-            if(arr[i][j][attr] == value) return arr[i][j];                
-        }
-    }
-    return undefined;
-}
-
-export function shortcuts(ele, scale) {
-    if(ele.classList.contains('active')) {
-        switch (p.keyCode) {
-            case 27:
-                ele.classList.toggle('active');
-                break;
-            case 13:
-                document.getElementById('buy' + scale).click();
-                break;
-        }
+export class Connection {
+    constructor(start, finish) {
+        this.start = start;
+        this.finish = finish;
+        this.planes = [new Plane()];
     }
 }
 
-export function pushNewCity(region, index) {
-    const d = Math.round((region.d.x + region.d.y) / 20);
-    let x = region.x, y = region.y, textbox;
-
-    switch (cityPlaces[index]) {
-        case cityPlaces[0]:
-            x += region.d.x / 2, y += region.d.y / 2;
-            break;
-        case cityPlaces[1]:
-            x += region.d.x / 4, y += region.d.y / 4;
-            break;
-        case cityPlaces[2]:
-            x += region.d.x * (3 / 4), y += region.d.y / 4;
-            break;
-        case cityPlaces[3]:
-            x += region.d.x / 4, y += region.d.y * (3 / 4);
-            break;
-        case cityPlaces[4]:
-            x += region.d.x * (3 / 4), y += region.d.y * (3 / 4);
-            break;
+export class DisplayConnection extends Connection {
+    constructor(start, finish) {
+        super(start, finish);
     }
 
-    textbox = new Textbox(x - region.d.x / 6, y + d / 2, {x: region.d.x / 3, y: region.d.y / 4}, d, d * 0.7, d * 0.7);
-    region.cities.push(new City(x, y, d, region.possibleCitys[0], textbox, populations[index], region));
-    region.possibleCitys.shift();
+    display(p) {
+        p.push()
+        p.strokeWeight(1);
+        p.line(start.x, start.y, target.x, target.y);
+        p.pop();
+    }
 }
+
+export class Plane {
+    constructor() {
+        this.capacity = 100;
+        this.lvl = 1;
+    }
+
+    display(p) {
+
+    }
+} 

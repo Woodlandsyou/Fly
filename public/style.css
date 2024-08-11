@@ -1,11 +1,16 @@
 body {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100vh;
     background-color: #8DB6CD;
     overflow-y: hidden;
-    overflow-x: hidden;
+    overflow-x: scroll;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    height: 100vh;
+    background-color: inherit;
     font-size: larger;
     flex-direction: column;
 }
@@ -15,6 +20,7 @@ canvas {
 }
 
 .popup {
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -23,26 +29,31 @@ canvas {
     background-color: white;
     padding: 20px 70px;
     border: 5px solid lightslategray;
+    border-radius: 2%;
 }
 
-.popupRegion {
-    display: none;
+.form.content {
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
 }
 
-.popupCity {
-    display: none;
+.popupForm {
+    background-color: #87ceeb;
 }
 
-.popupRegion.active {
-    display: block;
-}
-
-.popupCity.active {
+.popup.active {
     display: block;
 }
 
 .content > p {
     font-size: xx-large;
+}
+
+.formInputs {
+    border: 2px dashed darkgray;
+    border-radius: 5vh;
+    padding: 0.5vw 1vw;
 }
 
 .clsPopupBtn {
@@ -74,16 +85,17 @@ canvas {
     width: calc(100% + 10px);
 }
 
-.topBarEle {
-    background-color: olive;
-    border-radius: 16px;
-    padding: 5px;
-    border: 5px solid #9ab973;
+#openConnectionForm {
+    border-radius: 19px;
+    background-color: #00d415;
+    border: 5px inset green;
+    height: 50%;
 }
 
-.topBarEleContainer {
-    font-size: x-large;
-    padding: 0px 100px;
+#openConnectionForm:hover {
+    background-color:  #90ee90;
+    border-style: outset;
+    cursor: pointer;
 }
 
 .topBar {
@@ -94,6 +106,20 @@ canvas {
     text-align: justify;
 }
 
-.flexEle {
-    margin-bottom: 30px;
+.topBarEle {
+    background-color: olive;
+    border-radius: 16px;
+    padding: 5px;
+    border: 5px solid #9ab973;
+}
+
+.topBarEleContainer {
+    display: flex;
+    align-items: center;
+    font-size: x-large;
+    padding: 0px 100px;
+}
+
+.searchCity {
+    padding: 0px 5px;
 }
