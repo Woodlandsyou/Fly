@@ -215,8 +215,14 @@ export class City extends ClickableText {
             popupCity.children[0].children[0].textContent = this.name;
             const ul = popupCity.children[0].children[1];
             ul.children[0].textContent = this.population.length ? this.population:'No population'; 
-            ul.children[1].textContent = this.capacity; 
-            ul.children[2].textContent = this.connections.length ? this.connections:'No Connections';
+            ul.children[1].textContent = this.capacity;
+            let str = '';
+            if(!this.connections.length) str = 'No Connections';
+            else this.connections.forEach(e => {
+                str += e.finish.name;
+                str += '<br>';
+            });
+            ul.children[2].textContent = str;
         }
         console.log(this);
     }
