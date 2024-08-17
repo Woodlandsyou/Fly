@@ -196,6 +196,9 @@ export class City extends ClickableText {
         }
         p.pop();
         this.displayName(p);
+        for (let i = 0; i < this.connections.length; i++) {
+            if(this.connections[i] instanceof DisplayConnection) this.displayConnection(p, this.connections[i]);            
+        }
     }
 
     displayName(p) {
@@ -209,6 +212,13 @@ export class City extends ClickableText {
         p.pop();
     }
 
+    displayConnection(p, connection) {
+        p.push();
+        p.strokeWeight(1);
+        p.line(this.x, this.y, connection.finish.x, connection.finish.y);
+        p.pop();
+    }
+
     onClick(clickedOutsideOfPopupRegion) {
         if(clickedOutsideOfPopupRegion) {
             popupCity.classList.toggle('active');
@@ -219,10 +229,10 @@ export class City extends ClickableText {
             let str = '';
             if(!this.connections.length) str = 'No Connections';
             else this.connections.forEach(e => {
+                if(str) str += ', ';
                 str += e.finish.name;
-                str += '<br>';
             });
-            ul.children[2].textContent = str;
+            ul.children[2].children[0].textContent = str;
         }
         console.log(this);
     }

@@ -81,21 +81,7 @@ function createRegions() {
 
 function listeners() {
     //Listener in Capturing-Phase
-    popupRegion.addEventListener('click', event => {
-        clickedOutsideOfPopupRegion = false;
-    }, true);
-
-    popupCity.addEventListener('click', event => {
-        clickedOutsideOfPopupRegion = false;
-    }, true);
-
-    popupFoundCity.addEventListener('click', event => {
-        clickedOutsideOfPopupRegion = false;
-    }, true);
-
-    connectionForm.addEventListener('click', event => {
-        clickedOutsideOfPopupRegion = false;
-    }, true);
+    Array.from(document.getElementsByClassName('popup')).forEach(q => q.addEventListener('click', e => { clickedOutsideOfPopupRegion = false;}, true));
 
     // Listener in Bubbling-Phase
     document.addEventListener('click', event => {
@@ -172,8 +158,10 @@ function listeners() {
         const str = city ? `
             Region: { x: ${city.parent.x / s.x + 1}, y: ${city.parent.y / s.y + 1} } 
             City: { index: ${city.parent.cities.indexOf(city)}}
-            `:`Couldn't find City "${searchCity.value}"`
-        popupFoundCity.children[0].children[0].textContent = str;
+            `:`Couldn't find City "${searchCity.value}"`;
+        
+        popupFoundCity.children[0].children[0].textContent = city.name;
+        popupFoundCity.children[0].children[1].textContent = str;
         searchCity.value = '';
     });
 }

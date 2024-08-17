@@ -123,3 +123,7 @@ canvas {
 .searchCity {
     padding: 0px 5px;
 }
+
+.li-City {
+    text-align: left;
+}

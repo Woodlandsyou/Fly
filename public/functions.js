@@ -1,3 +1,5 @@
+import { City, Textbox, cityPlaces, possibleRegions} from "./modules.js";
+
 export const countries = await getData('/getCountriesAndCapitals');
 export const startCities = await getData('/getCities');
 
@@ -21,7 +23,7 @@ async function getData(URL) {
     return await res.json();
 }
 
-export function interval(freq, possibleRegions, City, Textbox, cityPlaces) {
+export function interval(freq) {
     return setInterval(() => {
         if(possibleRegions.length) {
             const r1 = Math.floor(Math.random() * possibleRegions.length);
@@ -70,7 +72,7 @@ export function findCity(name) {
     return null;
 }
 
-export function pushNewCity(region, index, City, Textbox, cityPlaces) {
+export function pushNewCity(region, index) {
     const d = Math.round((region.d.x + region.d.y) / 20);
     let x = region.x, y = region.y, textbox;
 
