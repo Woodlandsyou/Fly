@@ -17,7 +17,6 @@ let k = false, inter;
 
 window.giveMoney = (key, amount) => { if(key === 'Linus Hahlen') money.amount += amount; }
 window.regions = regions;
-window.find = findCity;
 window.cities = cities;
 
 const game = p => {
