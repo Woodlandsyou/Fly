@@ -1,4 +1,4 @@
-import { City, Textbox, cityPlaces, possibleRegions} from "./modules.js";
+import { City, Textbox, cityPlaces, possibleRegions, popupFoundCity, DisplayConnection, Connection} from "./modules.js";
 
 export const countries = await getData('/getCountriesAndCapitals');
 export const startCities = await getData('/getCities');
@@ -114,4 +114,20 @@ export function createLi(textContent) {
 export function clacPrize(start, target, p) {
     console.log(start, target, p.dist);
     return 100;
+}
+
+export function cityNotFound(start, target, inputs) {
+    if(start === null || target === null) {
+        popupFoundCity.classList.toggle('active');
+        let str =  `Couldn't find Cities: 
+        (${!start ? inputs[0].value + ', ':''}${target === null ? inputs[1].value:''})`;
+        popupFoundCity.children[0].children[0].textContent = str;
+        return false;
+    }
+    return true;
+}
+
+export function makeNewConnection(start, target) {
+    start.connections.push(new DisplayConnection(start, target));
+    target.connections.push(new Connection(target, start));
 }

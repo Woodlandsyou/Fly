@@ -7,7 +7,7 @@ import {
 }  from './modules.js';
 
 import {
-    findCities, findEle, shortcuts, interval, findCity, closeEle, clacPrize,
+    findCities, findEle, shortcuts, interval, findCity, closeEle, clacPrize, cityNotFound, makeNewConnection,
     countries, startCities,
 } from "./functions.js";
 
@@ -25,7 +25,6 @@ const game = p => {
         money.amount = 10000000;
         //html stuff
         listeners();
-        document.getElementById('money').textContent = `Money: ${money.amount}💸`;
         //js stuff
         p.createCanvas(_width, _height);
         console.log(createRegions());
@@ -163,20 +162,4 @@ function listeners() {
         popupFoundCity.children[0].children[1].textContent = str;
         searchCity.value = '';
     });
-}
-
-function cityNotFound(start, target, inputs) {
-    if(start === null || target === null) {
-        popupFoundCity.classList.toggle('active');
-        let str =  `Couldn't find Cities: 
-        (${!start ? inputs[0].value + ', ':''}${target === null ? inputs[1].value:''})`;
-        popupFoundCity.children[0].children[0].textContent = str;
-        return false;
-    }
-    return true;
-}
-
-function makeNewConnection(start, target) {
-    start.connections.push(new DisplayConnection(start, target));
-    target.connections.push(new Connection(target, start));
 }
