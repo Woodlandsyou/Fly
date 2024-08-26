@@ -22,8 +22,8 @@ canvas {
 .popup {
     display: none;
     position: absolute;
-    top: 50%;
-    left: 50%;
+    bottom: 0;
+    left: 0;
     transform: translate(-50%, -50%);
     text-align: center;
     background-color: white;
