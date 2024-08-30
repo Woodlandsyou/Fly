@@ -7,7 +7,7 @@ import {
 }  from './modules.js';
 
 import {
-    findCities, findEle, shortcuts, interval, findCity, closeEle, clacPrize,
+    findCities, findEle, shortcuts, interval, findCity, closeEle, calcPrize,
     countries, startCities, makeNewConnection,
 } from "./functions.js";
 
@@ -135,14 +135,13 @@ function listeners() {
     connectionForm.addEventListener('submit', event => {
         event.preventDefault();
         if(connectionForm.classList.contains('active')) {
-            const inputs = document.getElementsByClassName('inputs');
-            const start = findCity(inputs[0].value), target = findCity(inputs[1].value);
+            const ConCities = findCity(document.getElementsByClassName('inputs')[0].value);
 
-            if(cityNotFound(start, target, inputs)) {
-                const prize = calcPrize(start, target, p);
+            if(cityNotFound(ConCities, inputs)) {
+                const prize = calcPrize(ConCities, p);
                 console.log(prize);
                 money.amount -= prize;
-                makeNewConnection(findCity(inputs[0].value));
+                makeNewConnection(ConCities);
                 document.getElementById('buyConnection').click();
             }
 

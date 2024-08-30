@@ -118,5 +118,5 @@ export function calcPrize(cities, p) {
 
 export function makeNewConnection(cities) {
     const con = new Connection(cities);
-    cities[0].connections
+    cities.forEach(e => e.connections.push(con));
 }
