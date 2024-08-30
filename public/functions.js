@@ -1,4 +1,4 @@
-import { City, Textbox, cityPlaces, possibleRegions} from "./modules.js";
+import { City, Connection, Textbox, cityPlaces, possibleRegions} from "./modules.js";
 
 export const countries = await getData('/getCountriesAndCapitals');
 export const startCities = await getData('/getCities');
@@ -111,7 +111,12 @@ export function createLi(textContent) {
     return ele;
 }
 
-export function clacPrize(start, target, p) {
-    console.log(start, target, p.dist);
+export function calcPrize(cities, p) {
+    console.log(cities[0], cities[1], p.dist);
     return 100;
+}
+
+export function makeNewConnection(cities) {
+    const con = new Connection(cities);
+    cities[0].connections
 }

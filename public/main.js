@@ -8,7 +8,7 @@ import {
 
 import {
     findCities, findEle, shortcuts, interval, findCity, closeEle, clacPrize,
-    countries, startCities,
+    countries, startCities, makeNewConnection,
 } from "./functions.js";
 
 let regions = new Array(cols);
@@ -139,10 +139,10 @@ function listeners() {
             const start = findCity(inputs[0].value), target = findCity(inputs[1].value);
 
             if(cityNotFound(start, target, inputs)) {
-                const prize = clacPrize(start, target, p);
+                const prize = calcPrize(start, target, p);
                 console.log(prize);
                 money.amount -= prize;
-                makeNewConnection(start, target);
+                makeNewConnection(findCity(inputs[0].value));
                 document.getElementById('buyConnection').click();
             }
 
@@ -175,9 +175,4 @@ function cityNotFound(start, target, inputs) {
         return false;
     }
     return true;
-}
-
-function makeNewConnection(start, target) {
-    start.connections.push(new DisplayConnection(start, target));
-    target.connections.push(new Connection(target, start));
 }

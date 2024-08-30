@@ -248,15 +248,8 @@ export class Person {
 
 export class Connection {
     constructor(start, finish) {
-        this.start = start;
-        this.finish = finish;
+        this.cities = cities;
         this.planes = [new Plane()];
-    }
-}
-
-export class DisplayConnection extends Connection {
-    constructor(start, finish) {
-        super(start, finish);
     }
 
     display(p) {
