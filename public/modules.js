@@ -197,7 +197,7 @@ export class City extends ClickableText {
         p.pop();
         this.displayName(p);
         for (let i = 0; i < this.connections.length; i++) {
-            if(this.connections[i] instanceof DisplayConnection) this.displayConnection(p, this.connections[i]);            
+            if(this.connections[i].cities[1] === this) this.displayConnection(p, this.connections[i]);            
         }
     }
 
@@ -215,7 +215,7 @@ export class City extends ClickableText {
     displayConnection(p, connection) {
         p.push();
         p.strokeWeight(1);
-        p.line(this.x, this.y, connection.finish.x, connection.finish.y);
+        p.line(this.x, this.y, connection.cities[0].x, connection.cities[0].y);
         p.pop();
     }
 
@@ -227,10 +227,12 @@ export class City extends ClickableText {
             ul.children[0].textContent = this.population.length ? this.population:'No population'; 
             ul.children[1].textContent = this.capacity;
             let str = '';
+            console.log(this.connections);
             if(!this.connections.length) str = 'No Connections';
             else this.connections.forEach(e => {
                 if(str) str += ', ';
-                str += e.finish.name;
+                if(e.cities[0] === this) str += e.cities[1].name;
+                else str += e.cities[0].name;
             });
             ul.children[2].children[0].textContent = str;
         }

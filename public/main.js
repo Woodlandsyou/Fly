@@ -1,5 +1,5 @@
 import {  
-    Region, Connection, DisplayConnection, City, Textbox, 
+    Region, City, Textbox, 
     states, cols, rows, s,  _width, _height, cityPlaces,
     popupRegion, popupCity, searchCity, popupFoundCity, connectionForm,
     buyRegionBtn, openConnectionForm,
@@ -135,7 +135,8 @@ function listeners() {
     connectionForm.addEventListener('submit', event => {
         event.preventDefault();
         if(connectionForm.classList.contains('active')) {
-            const ConCities = findCity(document.getElementsByClassName('inputs')[0].value);
+            const inputs = document.getElementsByClassName('inputs');
+            const ConCities = [findCity(inputs[0].value), findCity(inputs[1].value)];
 
             if(cityNotFound(ConCities, inputs)) {
                 const prize = calcPrize(ConCities, p);
