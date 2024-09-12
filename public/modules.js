@@ -59,30 +59,34 @@ class Clickable {
         }
     }
 
-    onClick(clickedOutsideOfPopupRegion) {
+    onClick() {
         console.log(this);
     }
 }
 
 class ClickableText extends Clickable {
-    constructor(x, y, d, name) {
+    constructor(x, y, d, name, p) {
         super(x, y, d);
         this.name = name;
-        this.words = this.name.split(/\s/);
-        this.textbox = new Textbox(x, y, d);
+        this.words = this.sortWordsLength(this.name.split(/\s/), p);
+        // this.textbox = new Textbox(x, y, d);
     }
 
-    textSizing(p, textbox) {
-        p.textSize(textbox.defaultSize);
-        for (let i = 0; i < this.words.length; i++) {
-            if(p.textWidth(this.words[i]) > textbox.d.x || textbox.defaultSize * this.words.length > textbox.d.y) p.textSize(textbox.small);
+    // Longest word first shortest last
+    sortWordsLength(words, p) {
+        for (let i = 1; i < words.length; i++) {
+            if(p.textWidth(words[i]) > p.textWidth(words[i - 1])) {
+                let x = words[i];
+                words[i] = words[i - 1];
+                words[i - 1] = x;
+            }
         }
     }
 }
 
 export class Region extends ClickableText {
-    constructor(x, y, d, state, name, cities) {
-        super(x, y, d, name);
+    constructor(x, y, d, state, name, cities, p) {
+        super(x, y, d, name, p);
         this.state = state;
         this.words = this.name.split(/\s/);
         this.possibleCitys = cities;
@@ -175,8 +179,8 @@ export class Region extends ClickableText {
 }
 
 export class City extends ClickableText {
-    constructor(x, y, d, name, textbox, parent) {
-        super(x, y, d, name);
+    constructor(x, y, d, name, textbox, parent, p) {
+        super(x, y, d, name, p);
         this.parent = parent;
         this.capital = parent.capital === this.name;
         this.connections = [];

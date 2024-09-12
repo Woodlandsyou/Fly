@@ -3,7 +3,7 @@ import {
     states, cols, rows, s,  _width, _height, cityPlaces,
     popupRegion, popupCity, searchCity, popupFoundCity, connectionForm,
     buyRegionBtn, openConnectionForm,
-    money, cities, possibleRegions, 
+    money, cities, possibleRegions,
 }  from './modules.js';
 
 import {
@@ -69,7 +69,7 @@ function createRegions() {
         for (let j = 0; j < rows; j++) {
             let r = Math.floor(Math.random() * cns.length);
             const cs = findCities(cns[r].country, cns[r].city, startCities);
-            regions[i][j] = new Region(i * s.x, j * s.y, s, states[0], cns[r].country, cs);
+            regions[i][j] = new Region(i * s.x, j * s.y, s, states[0], cns[r].country, cs, p);
             cns.splice(r, 1);
         }
     }
