@@ -1,4 +1,4 @@
-import { City, Connection, Textbox, cityPlaces, possibleRegions} from "./modules.js";
+import { City, Connection, cityPlaces, possibleRegions} from "./modules.js";
 
 export const countries = await getData('/getCountriesAndCapitals');
 export const startCities = await getData('/getCities');
@@ -94,7 +94,7 @@ export function pushNewCity(region, index) {
             break;
     }
 
-    textbox = new Textbox(x - region.d.x / 6, y + d / 2, {x: region.d.x / 3, y: region.d.y / 5});
+    textbox = {x: x - region.d.x / 6, y: y + d / 2, d: {x: region.d.x / 3, y: region.d.y / 5}};
     const c = new City(x, y, d, region.possibleCitys[0], textbox, region);
     region.cities.push(c);
     region.possibleCitys.shift();

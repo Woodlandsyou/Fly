@@ -1,5 +1,5 @@
 import {  
-    Region, City, Textbox, 
+    Region, City, 
     states, cols, rows, s,  _width, _height, cityPlaces,
     popupRegion, popupCity, searchCity, popupFoundCity, connectionForm,
     buyRegionBtn, openConnectionForm,
@@ -29,13 +29,13 @@ const game = p => {
         document.getElementById('money').textContent = `Money: ${money.amount}💸`;
         //js stuff
         p.createCanvas(_width, _height);
-        console.log(createRegions());
-        inter = interval(20000, possibleRegions, City, Textbox, cityPlaces);
+        console.log(createRegions(p));
+        // inter = interval(20000, possibleRegions);
     }
 
     p.draw = () => {
         if(!k) {
-            inter = inter ? inter:interval(20000);
+            // inter = inter ? inter:interval(20000);
             regions.forEach(q => q.forEach(e => {
                 e.display(p);
                 e.stateLogic(p, clickedOutsideOfPopupRegion);
@@ -62,7 +62,7 @@ const game = p => {
 const p = new p5(game);
 window.p = p;
 
-function createRegions() {
+function createRegions(p) {
     let cns = countries.slice();
     for (let i = 0; i < cols; i++) {
         regions[i] = new Array(rows);
