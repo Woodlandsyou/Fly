@@ -16,7 +16,7 @@ export const connectionForm = document.getElementById('connectionForm');
 export const buyRegionBtn = document.getElementById('buyRegion');
 export const openConnectionForm = document.getElementById('openConnectionForm');
 
-export let possibleRegions = [];
+export let possibleRegions = [], cities = [], connections = [];
 export let money = {
     amount: null,
     get amount() {
@@ -28,7 +28,6 @@ export let money = {
         document.getElementById('money').textContent = `Money: ${this.amount}💸`;
     }
 };
-export let cities = [];
 
 class Clickable {
     constructor(x, y, d, name) {
@@ -109,7 +108,7 @@ export class Region extends Clickable {
                 break;
         }
 
-        p.rect(this.x, this.y, this.d.x, this.d.y);
+        p.rect(this.x * s.x, this.y * s.y, this.d.x, this.d.y);
         p.pop();
     }
 
@@ -119,7 +118,7 @@ export class Region extends Clickable {
                 this.drawText(p);
                 break;
             case states[1]:
-                this.cities.forEach(e=> {
+                this.cities.forEach(e => {
                     e.display(p);
                     e.released(p, clickedOutsideOfPopupRegion);
                 })
@@ -132,14 +131,14 @@ export class Region extends Clickable {
         p.stroke(145, 145, 120);
         p.fill(145, 145, 120);
         p.textAlign(p.CENTER, p.CENTER);        
-        p.text(this.name, this.x, this.y, this.d.x, this.d.y);
+        p.text(this.name, this.x * s.x, this.y * s.y, this.d.x, this.d.y);
         p.pop();
     }
 
     released(p, clickedOutsideOfPopupRegion, money) {
         this.down = p.mouseIsPressed ? true:this.down;
         if(this.down !== p.mouseIsPressed) {
-            if(p.mouseX - 10 > this.x && p.mouseX - 10 < this.x + this.d.x && p.mouseY - 10 > this.y && p.mouseY - 10 < this.y + this.d.y) {
+            if(p.mouseX - 10 > this.x * s.x && p.mouseX - 10 < this.x * s.x + this.d.x && p.mouseY - 10 > this.y * s.y && p.mouseY - 10 < this.y * s.y + this.d.y) {
                 this.onClick(clickedOutsideOfPopupRegion, money);
             }
             this.down = false;
@@ -183,7 +182,7 @@ export class City extends Clickable {
         p.pop();
         this.displayName(p);
         for (let i = 0; i < this.connections.length; i++) {
-            if(this.connections[i].cities[1] === this) this.displayConnection(p, this.connections[i]);            
+            if(this.connections[i].cities[1] === this) this.connections[i].display(p);
         }
     }
 
@@ -194,13 +193,6 @@ export class City extends Clickable {
         p.text(this.name, this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
         // p.noFill();
         // p.rect(this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
-        p.pop();
-    }
-
-    displayConnection(p, connection) {
-        p.push();
-        p.strokeWeight(1);
-        p.line(this.x, this.y, connection.cities[0].x, connection.cities[0].y);
         p.pop();
     }
 
@@ -234,7 +226,7 @@ export class Person {
 }
 
 export class Connection {
-    constructor(start, finish) {
+    constructor(cities) {
         this.cities = cities;
         this.planes = [new Plane()];
     }
@@ -242,7 +234,7 @@ export class Connection {
     display(p) {
         p.push()
         p.strokeWeight(1);
-        p.line(start.x, start.y, target.x, target.y);
+        p.line(this.cities[0].x, this.cities[0].y, this.cities[1].x, this.cities[1].y);
         p.pop();
     }
 }

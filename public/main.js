@@ -1,9 +1,9 @@
 import {  
-    Region, City, 
-    states, cols, rows, s,  _width, _height, cityPlaces,
+    Region, 
+    states, cols, rows, s,  _width, _height,
     popupRegion, popupCity, searchCity, popupFoundCity, connectionForm,
     buyRegionBtn, openConnectionForm,
-    money, cities, possibleRegions,
+    money, connections, possibleRegions,
 }  from './modules.js';
 
 import {
@@ -17,9 +17,7 @@ let k = false, inter;
 
 window.giveMoney = (key, amount) => { if(key === 'Linus Hahlen') money.amount += amount; }
 window.regions = regions;
-window.find = findCity;
-window.cities = cities;
-
+window.connections = connections;
 const game = p => {
 
     p.setup = () => {
@@ -69,7 +67,7 @@ function createRegions(p) {
         for (let j = 0; j < rows; j++) {
             let r = Math.floor(Math.random() * cns.length);
             const cs = findCities(cns[r].country, cns[r].city, startCities);
-            regions[i][j] = new Region(i * s.x, j * s.y, s, states[0], cns[r].country, cs, p);
+            regions[i][j] = new Region(i, j, s, states[0], cns[r].country, cs, p);
             cns.splice(r, 1);
         }
     }
@@ -136,11 +134,23 @@ function listeners() {
         event.preventDefault();
         if(connectionForm.classList.contains('active')) {
             const inputs = document.getElementsByClassName('inputs');
-            const ConCities = [findCity(inputs[0].value), findCity(inputs[1].value)];
+            const i1 = findCity(inputs[0].value), i2 = findCity(inputs[1].value);
+
+            const ConCities = [];
+            ConCities.push(i1.x + i2.y > i2.x + i2.y ? i1:i2);
+            ConCities.push(ConCities.indexOf(i1) === -1 ? i1:i2);
+
+            console.log('--------------------------------------');
+            console.log(`i1:`);
+            console.log(i1);
+            console.log(`i2:`);
+            console.log(i2);
+            console.log(`cities:`);
+            console.log(ConCities);
+            console.log('--------------------------------------');
 
             if(cityNotFound(ConCities, inputs)) {
                 const prize = calcPrize(ConCities, p);
-                console.log(prize);
                 money.amount -= prize;
                 makeNewConnection(ConCities);
                 document.getElementById('buyConnection').click();

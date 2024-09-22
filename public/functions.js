@@ -1,4 +1,4 @@
-import { City, Connection, cityPlaces, possibleRegions} from "./modules.js";
+import { City, Connection, cities, cityPlaces, connections, possibleRegions, s} from "./modules.js";
 
 export const countries = await getData('/getCountriesAndCapitals');
 export const startCities = await getData('/getCities');
@@ -74,7 +74,7 @@ export function findCity(name) {
 
 export function pushNewCity(region, index) {
     const d = Math.round((region.d.x + region.d.y) / 20);
-    let x = region.x, y = region.y, textbox;
+    let x = region.x * s.x, y = region.y * s.y, textbox;
 
     switch (cityPlaces[index]) {
         case cityPlaces[0]:
@@ -112,11 +112,11 @@ export function createLi(textContent) {
 }
 
 export function calcPrize(cities, p) {
-    console.log(cities[0], cities[1], p.dist);
     return 100;
 }
 
 export function makeNewConnection(cities) {
     const con = new Connection(cities);
     cities.forEach(e => e.connections.push(con));
+    connections.push(con);
 }
