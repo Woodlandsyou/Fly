@@ -81,7 +81,7 @@ export class Region extends Clickable {
     set state(newState) {
         if(newState === states[1]) {
             possibleRegions.push(this);
-            pushNewCity(this, this.cities.length);
+            pushNewCity(this, this.cities.length, p);
         }
         this._state = newState;
     }
@@ -130,7 +130,7 @@ export class Region extends Clickable {
         p.push();
         p.stroke(145, 145, 120);
         p.fill(145, 145, 120);
-        p.textAlign(p.CENTER, p.CENTER);        
+        p.textAlign(p.CENTER, p.CENTER);
         p.text(this.name, this.x * s.x, this.y * s.y, this.d.x, this.d.y);
         p.pop();
     }
@@ -160,8 +160,9 @@ export class Region extends Clickable {
 }
 
 export class City extends Clickable {
-    constructor(x, y, d, name, textbox, parent) {
+    constructor(x, y, d, name, textbox, parent, p) {
         super(x, y, d, name);
+        this.words = this.sortWordsLength(this.name.split(/\s/), p);
         this.parent = parent;
         this.capital = parent.capital === this.name;
         this.connections = [];
@@ -190,6 +191,7 @@ export class City extends Clickable {
         p.push();
         p.fill(0);
         p.textAlign(p.CENTER, p.CENTER);
+        this.textSize(p);
         p.text(this.name, this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
         // p.noFill();
         // p.rect(this.textbox.x, this.textbox.y, this.textbox.d.x, this.textbox.d.y);
@@ -214,6 +216,14 @@ export class City extends Clickable {
             ul.children[2].children[0].textContent = str;
         }
         console.log(this);
+    }
+
+    textSize(p) {
+        let size = p.textSize();
+        while(p.textWidth(this.words[0]) > this.textbox.x && size >= 0) {
+            size--;
+            textSize(size);
+        }
     }
 }
 

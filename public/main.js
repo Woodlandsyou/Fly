@@ -7,8 +7,10 @@ import {
 }  from './modules.js';
 
 import {
-    findCities, findEle, shortcuts, interval, findCity, closeEle, calcPrize,
+    findCities, findEle, shortcuts, interval, findCity, closeEle,
     countries, startCities, makeNewConnection,
+    cityNotFound,
+    pay,
 } from "./functions.js";
 
 let regions = new Array(cols);
@@ -28,17 +30,22 @@ const game = p => {
         //js stuff
         p.createCanvas(_width, _height);
         console.log(createRegions(p));
-        // inter = interval(20000, possibleRegions);
+        // inter = interval(20000, p);
     }
 
     p.draw = () => {
         if(!k) {
-            // inter = inter ? inter:interval(20000);
+            // inter = inter ? inter:interval(20000, p);
             regions.forEach(q => q.forEach(e => {
                 e.display(p);
                 e.stateLogic(p, clickedOutsideOfPopupRegion);
                 if(e.state === states[0]) e.released(p, clickedOutsideOfPopupRegion, money);
             }));
+
+            connections.forEach(e => {
+                e.display(p);
+            });
+
             clickedOutsideOfPopupRegion = true;
         } else {
             clearInterval(inter);
@@ -136,23 +143,9 @@ function listeners() {
             const inputs = document.getElementsByClassName('inputs');
             const i1 = findCity(inputs[0].value), i2 = findCity(inputs[1].value);
 
-            const ConCities = [];
-            ConCities.push(i1.x + i2.y > i2.x + i2.y ? i1:i2);
-            ConCities.push(ConCities.indexOf(i1) === -1 ? i1:i2);
-
-            console.log('--------------------------------------');
-            console.log(`i1:`);
-            console.log(i1);
-            console.log(`i2:`);
-            console.log(i2);
-            console.log(`cities:`);
-            console.log(ConCities);
-            console.log('--------------------------------------');
-
-            if(cityNotFound(ConCities, inputs)) {
-                const prize = calcPrize(ConCities, p);
-                money.amount -= prize;
-                makeNewConnection(ConCities);
+            if(cityNotFound(i1, i2, inputs)) {
+                pay([i1, i2], p);
+                makeNewConnection([i1, i2]);
                 document.getElementById('buyConnection').click();
             }
 
@@ -174,15 +167,4 @@ function listeners() {
         popupFoundCity.children[0].children[1].textContent = str;
         searchCity.value = '';
     });
-}
-
-function cityNotFound(start, target, inputs) {
-    if(start === null || target === null) {
-        popupFoundCity.classList.toggle('active');
-        let str =  `Couldn't find Cities: 
-        (${!start ? inputs[0].value + ', ':''}${target === null ? inputs[1].value:''})`;
-        popupFoundCity.children[0].children[0].textContent = str;
-        return false;
-    }
-    return true;
 }

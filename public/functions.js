@@ -1,4 +1,4 @@
-import { City, Connection, cities, cityPlaces, connections, possibleRegions, s} from "./modules.js";
+import { City, Connection, cities, cityPlaces, connections, popupFoundCity, possibleRegions, s} from "./modules.js";
 
 export const countries = await getData('/getCountriesAndCapitals');
 export const startCities = await getData('/getCities');
@@ -23,13 +23,13 @@ async function getData(URL) {
     return await res.json();
 }
 
-export function interval(freq) {
+export function interval(freq, p) {
     return setInterval(() => {
         if(possibleRegions.length) {
             const r1 = Math.floor(Math.random() * possibleRegions.length);
             const e = possibleRegions[r1];
             // console.log(`new City: ${e.possibleCitys[0]}`);
-            pushNewCity(e, e.cities.length, City, Textbox, cityPlaces)
+            pushNewCity(e, e.cities.length, City, Textbox, cityPlaces, p)
             if(!e.possibleCitys.length) possibleRegions.splice(r1, 1);
         }
     }, freq);
@@ -72,7 +72,7 @@ export function findCity(name) {
     return null;
 }
 
-export function pushNewCity(region, index) {
+export function pushNewCity(region, index, p) {
     const d = Math.round((region.d.x + region.d.y) / 20);
     let x = region.x * s.x, y = region.y * s.y, textbox;
 
@@ -95,7 +95,7 @@ export function pushNewCity(region, index) {
     }
 
     textbox = {x: x - region.d.x / 6, y: y + d / 2, d: {x: region.d.x / 3, y: region.d.y / 5}};
-    const c = new City(x, y, d, region.possibleCitys[0], textbox, region);
+    const c = new City(x, y, d, region.possibleCitys[0], textbox, region, p);
     region.cities.push(c);
     region.possibleCitys.shift();
     cities.push(c);
@@ -111,12 +111,23 @@ export function createLi(textContent) {
     return ele;
 }
 
-export function calcPrize(cities, p) {
-    return 100;
+export function pay(cities, p) {
+    return 0;
 }
 
 export function makeNewConnection(cities) {
     const con = new Connection(cities);
-    cities.forEach(e => e.connections.push(con));
     connections.push(con);
+    cities.forEach(e => e.connections.push(connections[connections.indexOf(con)]));
+}
+
+export function cityNotFound(start, target, inputs) {
+    if(start === null || target === null) {
+        popupFoundCity.classList.toggle('active');
+        let str =  `Couldn't find Cities: 
+        (${!start ? inputs[0].value + ', ':''}${target === null ? inputs[1].value:''})`;
+        popupFoundCity.children[0].children[0].textContent = str;
+        return false;
+    }
+    return true;
 }
